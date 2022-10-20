@@ -1,0 +1,47 @@
+name: "Helm Chart Release"
+description: "Package and release helm charts to an S3 bucket"
+inputs:
+  aws_access_key_id:
+    description: "The AWS access key with permissions to push to S3"
+    required: true
+  aws_secret_access_key:
+    description: "The AWS secret access key"
+    required: true
+  aws_region:
+    description: "The AWS region where there S3 bucket is created"
+    required: false
+    default: us-west-2
+  chart_director:
+    description: "The directory where the helm charts are stored"
+    required: true
+  s3_bucket:
+    description: "The S3 bucket to push to"
+    required: false
+    default: s3://hpe-uxi-helm-repo
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+      id: install-helm
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ inputs.aws_access_key_id }}
+        aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
+        aws-region: ${{ inputs.aws_region }}
+
+    - name: Push Chart To S3
+      shell: bash
+      run: |
+        export CHART_DIR=${{ inputs.chart_directory }}
+        helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.12.0
+        helm repo add aruba-uxi ${{ inputs.s3_bucket }}
+        helm dependency update ${CHART_DIR}
+        helm package ${CHART_DIR} --destination chart-packages
+        helm s3 push chart-packages/$(ls chart-packages) aruba-uxi --ignore-if-exists

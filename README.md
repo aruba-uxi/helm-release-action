@@ -1,1 +1,1 @@
-# helm-release-action
+# Helm Release Action
