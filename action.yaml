@@ -11,7 +11,7 @@ inputs:
     description: "The AWS region where there S3 bucket is created"
     required: false
     default: us-west-2
-  chart_director:
+  chart_directory:
     description: "The directory where the helm charts are stored"
     required: true
   s3_bucket:
