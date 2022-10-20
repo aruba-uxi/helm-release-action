@@ -25,22 +25,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+    - uses: azure/setup-helm@v1
 
-    - name: Setup Helm
-      uses: azure/setup-helm@v1
-      id: install-helm
-
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
+    - uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ inputs.aws_access_key_id }}
         aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
         aws-region: ${{ inputs.aws_region }}
 
-    - name: Push Chart To S3
-      shell: bash
+    - shell: bash
       run: |
         export CHART_DIR=${{ inputs.chart_directory }}
         helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.12.0
