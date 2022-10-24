@@ -1,22 +1,22 @@
 name: "Helm Chart Release"
 description: "Package and release helm charts to an S3 bucket"
 inputs:
-  aws_access_key_id:
+  aws-access-key-id:
     description: "The AWS access key with permissions to push to S3"
     required: true
-  aws_secret_access_key:
+  aws-secret-access-key:
     description: "The AWS secret access key"
     required: true
-  aws_region:
+  aws-region:
     description: "The AWS region where there S3 bucket is created"
     required: true
-  chart_directory:
+  chart-directory:
     description: "The directory where the helm charts are stored"
     required: true
-  s3_bucket:
+  s3-bucket:
     description: "The S3 bucket to push to"
     required: true
-  chart_version:
+  chart-version:
     description: "The chart version number to use"
     required: true
 
@@ -27,15 +27,15 @@ runs:
 
     - uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ inputs.aws_access_key_id }}
-        aws-secret-access-key: ${{ inputs.aws_secret_access_key }}
-        aws-region: ${{ inputs.aws_region }}
+        aws-access-key-id: ${{ inputs.aws-access-key-id }}
+        aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
+        aws-region: ${{ inputs.aws-region }}
 
     - shell: bash
       run: |
-        export CHART_DIR=${{ inputs.chart_directory }}
+        export CHART_DIR=${{ inputs.chart-directory }}
         helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.12.0
-        helm repo add aruba-uxi ${{ inputs.s3_bucket }}
+        helm repo add aruba-uxi ${{ inputs.s3-bucket }}
         helm dependency update ${CHART_DIR}
-        helm package ${CHART_DIR} --destination chart-packages --version ${{ inputs.chart_version }}
+        helm package ${CHART_DIR} --destination chart-packages --version ${{ inputs.chart-version }}
         helm s3 push chart-packages/$(ls chart-packages) aruba-uxi --ignore-if-exists
