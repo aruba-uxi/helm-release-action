@@ -23,7 +23,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: azure/setup-helm@v1
+    - uses: azure/setup-helm@v3
 
     - uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -34,7 +34,7 @@ runs:
     - shell: bash
       run: |
         export CHART_DIR=${{ inputs.chart-directory }}
-        helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.12.0
+        helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.14.0
         helm repo add aruba-uxi ${{ inputs.s3-bucket }}
         helm dependency update ${CHART_DIR}
         helm package ${CHART_DIR} --destination chart-packages --version ${{ inputs.chart-version }}
