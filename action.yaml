@@ -38,4 +38,4 @@ runs:
         helm repo add aruba-uxi ${{ inputs.s3-bucket }}
         helm dependency update ${CHART_DIR}
         helm package ${CHART_DIR} --destination chart-packages --version ${{ inputs.chart-version }}
-        helm s3 push chart-packages/$(ls chart-packages) aruba-uxi --ignore-if-exists
+        helm s3 push chart-packages/$(ls chart-packages) aruba-uxi
