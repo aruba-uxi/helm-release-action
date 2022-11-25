@@ -1,14 +1,6 @@
 name: "Helm Chart Release"
 description: "Package and release helm charts to an S3 bucket"
 inputs:
-  skip-helm-setup:
-    description: "Skip the helm setup process if it has been run in the same job already"
-    required: false
-    default: "false"
-  skip-aws-setup:
-    description: "Skip the AWS setup process if it has been run in the same job already"
-    required: false
-    default: "false"
   aws-access-key-id:
     description: "The AWS access key with permissions to push to S3"
     required: true
@@ -21,12 +13,20 @@ inputs:
   chart-directory:
     description: "The directory where the helm charts are stored"
     required: true
-  s3-bucket:
-    description: "The S3 bucket to push to"
-    required: true
   chart-version:
     description: "The chart version number to use"
     required: true
+  s3-bucket:
+    description: "The S3 bucket to push to"
+    required: true
+  skip-aws-setup:
+    description: "Skip the AWS setup process if it has been run in the same job already"
+    required: false
+    default: "false"
+  skip-helm-setup:
+    description: "Skip the helm setup process if it has been run in the same job already"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
