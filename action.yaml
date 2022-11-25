@@ -4,11 +4,11 @@ inputs:
   aws-access-key-id:
     description: "The AWS access key with permissions to push to S3"
     required: true
-  aws-secret-access-key:
-    description: "The AWS secret access key"
-    required: true
   aws-region:
     description: "The AWS region where there S3 bucket is created"
+    required: true
+  aws-secret-access-key:
+    description: "The AWS secret access key"
     required: true
   chart-directory:
     description: "The directory where the helm charts are stored"
