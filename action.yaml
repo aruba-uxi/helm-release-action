@@ -31,10 +31,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup Helm
-      if: ${{ inputs.skip-helm-setup == 'false' }}
-      uses: azure/setup-helm@v3
-
     - name: Configure AWS Credentials
       if: ${{ inputs.skip-aws-setup == 'false' }}
       uses: aws-actions/configure-aws-credentials@v1
@@ -42,6 +38,10 @@ runs:
         aws-access-key-id: ${{ inputs.aws-access-key-id }}
         aws-secret-access-key: ${{ inputs.aws-secret-access-key }}
         aws-region: ${{ inputs.aws-region }}
+
+    - name: Setup Helm
+      if: ${{ inputs.skip-helm-setup == 'false' }}
+      uses: azure/setup-helm@v3
 
     - name: Setup Helm S3 Plugin
       if: ${{ inputs.skip-helm-setup == 'false' }}
