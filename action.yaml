@@ -55,6 +55,7 @@ runs:
 
     - name: Set Docker Image Tag
       if: ${{ inputs.docker-image-version != '' }}
+      shell: bash
       run: yq -i '.aruba-uxi.global.image.tag = "${{ inputs.docker-image-version }}"' ${{ inputs.chart-directory }}/values.yaml
 
     - name: Publish Chart
