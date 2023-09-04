@@ -19,7 +19,6 @@ inputs:
   docker-image-version:
     description: "The docker image version to set in the helm chart"
     required: false
-    default: "false"
   s3-bucket:
     description: "The S3 bucket to push to"
     required: true
