@@ -16,6 +16,9 @@ inputs:
   chart-version:
     description: "The chart version number to use"
     required: true
+  docker-image-version:
+    description: "The docker image version to set in the helm chart"
+    required: false
   s3-bucket:
     description: "The S3 bucket to push to"
     required: true
@@ -49,7 +52,13 @@ runs:
       run: |
         helm plugin install https://github.com/hypnoglow/helm-s3.git --version 0.14.0
 
-    - shell: bash
+    - name: Set Docker Image Tag
+      if: ${{ inputs.docker-image-version != '' }}
+      shell: bash
+      run: yq -i '.aruba-uxi.global.image.tag = "${{ inputs.docker-image-version }}"' ${{ inputs.chart-directory }}/values.yaml
+
+    - name: Publish Chart
+      shell: bash
       run: |
         export CHART_DIR=${{ inputs.chart-directory }}
         helm repo add aruba-uxi ${{ inputs.s3-bucket }}
