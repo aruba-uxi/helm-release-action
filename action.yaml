@@ -30,6 +30,10 @@ inputs:
     description: "Skip the helm setup process if it has been run in the same job already"
     required: false
     default: "false"
+  skip-helm-publish:
+    description: "Skip publishing the chart"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -58,6 +62,7 @@ runs:
       run: yq -i '.aruba-uxi.global.image.tag = "${{ inputs.docker-image-version }}"' ${{ inputs.chart-directory }}/values.yaml
 
     - name: Publish Chart
+      if: ${{ inputs.skip-helm-publish == 'false' }}
       shell: bash
       run: |
         export CHART_DIR=${{ inputs.chart-directory }}
