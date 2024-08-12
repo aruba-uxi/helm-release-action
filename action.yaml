@@ -66,6 +66,7 @@ runs:
       shell: bash
       run: |
         export CHART_DIR=${{ inputs.chart-directory }}
+        helm repo remove aruba-uxi || true
         helm repo add aruba-uxi ${{ inputs.s3-bucket }}
         helm dependency update ${CHART_DIR}
         helm package ${CHART_DIR} --destination chart-packages --version ${{ inputs.chart-version }}
